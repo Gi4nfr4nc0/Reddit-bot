@@ -2,6 +2,7 @@ package redditbot
 
 import (
 	"context"
+	"errors"
 	"math/rand"
 	"net/http"
 
@@ -60,13 +61,13 @@ func (b *Bot) randomString(length int) string {
 }
 
 func (b *Bot) ListenAndServe() {
-	if err := b.Server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	if err := b.Server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatal("error starting server:", err.Error())
 	}
 }
 
 func (b *Bot) ListenAndServeMetrics() {
-	if err := b.MetricsServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	if err := b.MetricsServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatal("error starting server:", err.Error())
 	}
 }
